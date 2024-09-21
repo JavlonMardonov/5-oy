@@ -15,3 +15,4 @@ class SignUpPage(QWidget):
         self.repeatPasswordInput = Input(self, 310, "Parolni takrorlang...")
 
         self.signupBtn = Button(self, 450, "Ro'yhatdan o'tish")
+        self.closebutton = Button(self, 510, "Ortga")

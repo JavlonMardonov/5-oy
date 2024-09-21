@@ -112,3 +112,4 @@ class ListWidgetWithTextArea(QListWidget):
         self.setItemWidget(item, widget)
         
         self.setIconSize(QSize(40, 40))
+        return item

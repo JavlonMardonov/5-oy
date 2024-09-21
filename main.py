@@ -32,6 +32,8 @@ class App:
 
         self.tizimgaKirishOyna.signinBtn.clicked.connect(self.login)
         self.royxatdanOtishOyna.signupBtn.clicked.connect(self.register)
+        self.tizimgaKirishOyna.closebutton.clicked.connect(self.closeSignInPage)
+        self.royxatdanOtishOyna.closebutton.clicked.connect(self.closeSignUpPage)
 
         self.boshSaxifaOyna.show()
         
@@ -40,6 +42,13 @@ class App:
         self.tizimgaKirishOyna.show()
         self.boshSaxifaOyna.close()
 
+    def closeSignInPage(self):
+        self.tizimgaKirishOyna.close()
+        self.boshSaxifaOyna.show()
+
+    def closeSignUpPage(self):
+        self.royxatdanOtishOyna.close()
+        self.boshSaxifaOyna.show()
 
     def showSignUpPage(self):
         self.royxatdanOtishOyna.show()

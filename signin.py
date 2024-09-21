@@ -13,3 +13,4 @@ class SignInPage(QWidget):
         self.passwordInput = Input(self, 180, "Password kiriting...")
 
         self.signinBtn = Button(self, 300, "Kirish")
+        self.closebutton = Button(self, 360, "Ortga")

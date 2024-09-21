@@ -11,15 +11,14 @@ class ChatsPage(QWidget):
         self.current_user_id = current_user_id
 
         self.move(750, 200)
-        self.resize(600, 800)
+        self.resize(400, 600)
         self.setWindowTitle("Chatlar")
         
-        self.newChatBtn = Button(self, 30, "New Chat")
+        self.newChatBtn = Button(self, 30, "Yangi Chat")
         self.newChatBtn.changeSize()
         self.newChatBtn.setGeometry(30, 30, 150, 50)
 
-        # Remove the refresh button
-        self.refreshBtn = Button(self, 30, "Refresh Chats")
+        self.refreshBtn = Button(self, 30, "Yangilash")
         self.refreshBtn.changeSize()
         self.refreshBtn.setGeometry(220, 30, 150, 50)
 
@@ -28,23 +27,19 @@ class ChatsPage(QWidget):
 
         self.loadChats()
         
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.loadChats)
-        self.timer.start(1000)
 
         self.newChatBtn.clicked.connect(self.createNewChat)
-        # Remove the refresh button connection
+
         self.refreshBtn.clicked.connect(self.loadChats)
         
-
-        self.chatsList.itemDoubleClicked.connect(self.openChatWindow)
+        
+        self.chatsList.itemClicked.connect(self.openChatWindow)
 
     def loadChats(self):
         self.chatsList.clear()
 
         allChats = self.database.getChatsByUserId(self.current_user_id)
         for chat in allChats:
-            print(chat['id'])
             user1_id = chat['user1_id']
             user2_id = chat['user2_id']
 
@@ -57,11 +52,10 @@ class ChatsPage(QWidget):
 
                 chat_item = self.chatsList.addTextAreaItem(chat_summary)
 
-                # if chat_item:
-                # chat_item.setData(Qt.UserRole, chat['id'])
-                # chat_item.setData()
-                # else:
-                #     print(f"Xatolik {other_user_name} bilan")
+                if chat_item:
+                    chat_item.setData(Qt.UserRole, chat['id'])  
+                else:
+                    print(f"Xatolik {other_user_name} bilan")
             else:
                 print(f"{chat['id']}  Mavjud emas")
 
@@ -80,14 +74,19 @@ class ChatsPage(QWidget):
             else:
                 self.showError("Bunaqa foydalanuvchi topilmadi!")
 
-    # def openChatWindow(self, item):
-    #     # chat_id = item.data()
-    #     chat_id = 1
+    def openChatWindow(self, item):
+        chat_id = item.data(Qt.UserRole)
 
-    #     chat_window = ChatWindow(self.current_user_id, chat_id)        
-    #     chat_window.show()
-        # self.close()
+        self.chat_window = ChatWindow(self.current_user_id, chat_id)
+        self.chat_window.show()
 
+        
+        self.chat_window.ortgaButton.clicked.connect(self.closechat)
+        self.close()
+        
+    def closechat(self):
+        self.chat_window.close()
+        self.show()
 
     def getUserInput(self):
         from PyQt5.QtWidgets import QInputDialog

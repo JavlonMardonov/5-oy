@@ -10,7 +10,7 @@ class MainPage(QWidget):
         super().__init__()
 
         self.move(750, 200)
-        self.setFixedSize(600, 800)  
+        self.setFixedSize(400, 600)  
         self.setWindowTitle("Bosh sahifa")
 
         pixmap = QPixmap("icons/Telegram.png")

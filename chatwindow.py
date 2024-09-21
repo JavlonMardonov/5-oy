@@ -9,26 +9,45 @@ class ChatWindow(QWidget):
         self.current_user_id = current_user_id
         self.chat_id = chat_id
 
+        self.move(750, 200)
         self.setWindowTitle("Chat Window")
-        self.resize(600, 800)
+        self.resize(400, 600)
 
-        main_layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
         # main_layout.sizeHint
-
+        top_layout = QHBoxLayout()
+        self.ortgaButton = QPushButton("Ortga", self)
+        self.ortgaButton.setFixedSize(80, 30)
+        self.ortgaButton.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                padding: 5px 10px;
+                font-size: 14px;
+                border: none;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: gry;
+            }
+        """)
+        # No signal connection as per your request
+        top_layout.addWidget(self.ortgaButton, alignment=Qt.AlignLeft)
+        top_layout.addStretch()
+        self.main_layout.addLayout(top_layout)
+        
+        
+        
         self.userchatDisplay = QTextEdit(self)
-        self.user2chatDisplay = QTextEdit(self)
         self.userchatDisplay.setReadOnly(True)
-        self.user2chatDisplay.setReadOnly(True)
-        # self.userchatDisplay.setStyleSheet("font-size: 14px;")
-        # self.user2chatDisplay.setStyleSheet("font-size: 14px;")
-        main_layout.addWidget(self.userchatDisplay)
-        main_layout.addWidget(self.user2chatDisplay)
+        self.userchatDisplay.setStyleSheet("font-size: 14px;")
+        self.main_layout.addWidget(self.userchatDisplay)
 
         self.loadMessages()
 
         input_layout = QHBoxLayout()
-        self.refreshBtn = QPushButton("Refresh", self)
+        self.refreshBtn = QPushButton("Yangilash", self)
         self.refreshBtn.setStyleSheet("""
             background-color: black;
             color: white;
@@ -55,12 +74,11 @@ class ChatWindow(QWidget):
         self.sendButton.clicked.connect(self.sendMessage)
         input_layout.addWidget(self.sendButton)
 
-        main_layout.addLayout(input_layout)
+        self.main_layout.addLayout(input_layout)
 
     def loadMessages(self):
         messages = self.database.selectMessages(self.chat_id)
         self.userchatDisplay.clear()
-        self.user2chatDisplay.clear()
 
         for message in messages:
             idd,chat_id,sender_id, message_text, sent_time = message[:5]
@@ -68,8 +86,8 @@ class ChatWindow(QWidget):
 
             
             sender_name = sender["fullname"]
-            print(sender_id,'   ',self.current_user_id)
-            if sender_id == self.current_user_id:
+            # print(sender_id,'   ',self.current_user_id)
+            if sender_id:
                 formatted_message = f"""
                 <div background-color: #e0f7fa; padding: 5px; border-radius: 5px; margin: 5px;">
                     <span><b>{sender_name}</b> ({sent_time}):</span><br>
@@ -77,14 +95,7 @@ class ChatWindow(QWidget):
                 </div>
                 """
                 self.userchatDisplay.append(formatted_message)
-            else:
-                formatted_message = f"""
-                <div text-align : right;background-color: #black; padding: 5px; border-radius: 5px; margin: 5px;">
-                    <span><b>{sender_name}</b> ({sent_time}):</span><br>
-                    <span>{message_text}</span>
-                </div>
-                """
-                self.user2chatDisplay.append(formatted_message)
+
         self.last_message_count=len(messages) 
             
     def sendMessage(self):
@@ -97,9 +108,9 @@ class ChatWindow(QWidget):
             self.loadMessages()
     
 
-# # Application entry point
-if __name__ == "__main__":
-    app2 = QApplication([])
-    window = ChatWindow(current_user_id=1, chat_id=1)
-    window.show()
-    app2.exec_()
+# # # Application entry point
+# if __name__ == "__main__":
+#     app2 = QApplication([])
+#     window = ChatWindow(current_user_id=1, chat_id=1)
+#     window.show()
+#     app2.exec_()
